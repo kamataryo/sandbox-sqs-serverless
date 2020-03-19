@@ -4,13 +4,9 @@ frameworkVersion: ">=1.66.0 <2.0.0"
 
 package:
   exclude:
-    - __test__
-    - .circleci/**
     - .git/**
-    - bin/**
     - src/**
     - .*
-    - jest*
     - tsconfig.*
     - package-lock.json
     - yarn.lock
@@ -20,31 +16,29 @@ provider:
   name: aws
   runtime: nodejs10.x
   memorySize: 128
-  region: us-east-1
+  region: ap-northeast-1
   stage: dev
   environment:
     QUEUE_NAME: ${self:custom.QUEUE_NAME}
+
   iamRoleStatements:
     - Effect: Allow
       Action:
         - "sqs:sendMessage"
       Resource:
-        - ${self:custom.QUEUE_ARN}
+        - Fn::GetAtt:
+            - MyQueue
+            - Arn
 
 custom:
   QUEUE_NAME: "my-queue"
-  QUEUE_ARN:
-    Fn::Join:
-      - ":"
-      - - "arn:aws:sqs::"
-        - ${self:custom.QUEUE_NAME}
 
 resources:
   Resources:
     MyQueue:
       Type: "AWS::SQS::Queue"
       Properties:
-        QueueName: "my-queue"
+        QueueName: ${self:custom.QUEUE_NAME}
 
 functions:
   publish:
@@ -53,4 +47,7 @@ functions:
     handler: dist/subscribe.handler
     events:
       - sqs:
-          arn: ${self:custom.QUEUE_ARN}
+          arn:
+            Fn::GetAtt:
+              - MyQueue
+              - Arn
