@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "npx sls deploy --noDeploy"
+    "test": "sls deploy --noDeploy",
+    "deploy": "npm run build && sls deploy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.39",
