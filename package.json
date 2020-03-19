@@ -1,0 +1,20 @@
+{
+  "name": "sandbox-sqs-serverless",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "npx sls deploy --noDeploy"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.39",
+    "aws-sdk": "^2.450.0",
+    "serverless": "^1.59.3",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  },
+  "peerDependencies": {
+    "aws-sdk": "^2"
+  }
+}
